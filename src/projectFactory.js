@@ -1,6 +1,6 @@
 const ProjectFactory = (title, description = "") => {
     
-    const id = Date.now();
+    const id = crypto.randomUUID();
 
     let todos = [];
 
@@ -12,7 +12,7 @@ const ProjectFactory = (title, description = "") => {
         todos.push(todoItem);
     };
 
-    const removeTodo = (todosId) => {
+    const removeTodo = (todoId) => {
         todos = todos.filter(todo => todo.id !== todoId);
     };
 
