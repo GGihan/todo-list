@@ -30,3 +30,41 @@ function storageAvailable(type) {
         );
     }
 };
+
+
+let defaultProject = null;
+
+const getDefaultProject = () => {
+    if (defaultProject === null) {
+        defaultProject = ProjectFactory("Inbox", "The default project for all new tasks");
+
+        const initialTodo = TodoFactory(
+            "Welcome Task", 
+            "Start by creating your own projects!", 
+            format(new Date(), 'yyyy-MM-dd'),
+            "high"
+        );
+        defaultProject.addTodo(initialTodo);
+    }
+
+    return defaultProject;
+};
+
+// Application Initialization
+
+if (storageAvailable('localStorage')) {
+    console.log("Local Storage is available.");
+} else {
+    console.log("Local storage is NOT available. Data will not persist.");
+}
+
+const inboxProject = getDefaultProject();
+
+const newTask = TodoFactory(
+    "New Habit", 
+    "Start drinking more water.", 
+    format(new Date(), 'yyyy-MM-dd'),
+    "medium"
+);
+
+inboxProject.addTodo(newTask);
