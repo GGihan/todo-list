@@ -26,7 +26,9 @@ const TodoFactory = (title, description, dueDate, priority) => {
     const setDueDate = (newDate) => { todoDueDate = newDate };
     const setPriority = (newPriority) => { todoPriority = newPriority };
     const setNotes = (newNotes) => { todoNotes = newNotes };
-    const toggleComplete = () => { isComplete = !isComplete };
+    const setIsComplete = (newState) => {
+        isComplete = !!newState;
+    };
 
     const addChecklistItem = (text) => {
         todoChecklist.push({ text, completed: false });
@@ -46,7 +48,7 @@ const TodoFactory = (title, description, dueDate, priority) => {
         setDueDate,
         setPriority,
         setNotes,
-        toggleComplete,
+        setIsComplete,
         addChecklistItem,
         toggleChecklistItem,
     };

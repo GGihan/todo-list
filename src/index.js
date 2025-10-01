@@ -102,7 +102,7 @@ const ProjectManager = (() => {
                     );
 
                     newTodo.setNotes(todoData.notes);
-                    if (todoData.isComplete) newTodo.toggleComplete();
+                    newTodo.setIsComplete(todoData.isComplete);
 
                     newProject.addTodo(newTodo);
                 });

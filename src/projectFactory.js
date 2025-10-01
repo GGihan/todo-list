@@ -43,7 +43,7 @@ const ProjectFactory = (title, description = "") => {
             dueDate: 'setDueDate',
             priority: 'setPriority',
             notes: 'setNotes',
-            isComplete: 'toggleComplete',
+            isComplete: 'setIsComplete',
         };
 
         Object.keys(updates).forEach(key => {
