@@ -50,6 +50,139 @@ const getDefaultProject = () => {
     return defaultProject;
 };
 
+
+
+let projectsState = [];
+const STORAGE_KEY = 'todoAppProjects';
+
+
+const ProjectManager = (() => {
+
+    const save = () => {
+        if (!storageAvailable('localStorage')) return;
+
+        const serializableData = projectsState.map(project => {
+            return {
+                id: project.id,
+                title: project.getTitle(),
+                description: project.getDescription(),
+                todos: project.getTodos().map(todo => todo.getDetails()),
+            };
+        });
+
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(serializableData));
+            console.log('Data saved.');
+        } catch (e) {
+            console.error('Error saving to localStorage:', e);
+        }
+    };
+
+
+    const load = () => {
+        if (!storageAvailable('localStorage')) return;
+
+        const jsonString = localStorage.getItem(STORAGE_KEY);
+        
+        // Signal that no data was loaded
+        if (!jsonString) return false; 
+
+        try {
+            const loadedData = JSON.parse(jsonString);
+
+            projectsState = loadedData.map(projectData => {
+                const newProject = ProjectFactory(projectData.title, projectData.description);
+
+                projectData.todos.forEach(todoData => {
+                    const newTodo = TodoFactory(
+                        todoData.title,
+                        todoData.description,
+                        todoData.dueDate,
+                        todoData.priority,
+                    );
+
+                    newTodo.setNotes(todoData.notes);
+                    if (todoData.isComplete) newTodo.toggleComplete();
+
+                    newProject.addTodo(newTodo);
+                });
+                return newProject;
+            });
+            console.log(`Successfully loaded ${projectsState.length} projects.`);
+            return true;
+        } catch (e) {
+            console.error('Error loading Data:', e);
+            return false;
+        }
+    };
+
+    
+    const init = () => {
+        const loaded = load();
+        if (!loaded || projectsState.length === 0) {
+            projectsState.push(getDefaultProject());
+            save();
+        }
+    };
+
+    const addProject = (project) => {
+        projectsState.push(project);
+        save();
+    };
+
+    const addProjectTodo = (projectId, todo) => {
+        const project = projectsState.find(p => p.id === projectId);
+        if (project) {
+            project.addTodo(todo);
+            save();
+        }
+    };
+
+    const removeProject = (projectId) => {
+        const index = projectsState.findIndex(p => p.id === projectId);
+
+        if (index > 0) {
+            projectsState.splice(index, 1);
+            save();
+        } else if (index === 0) {
+            console.warn('Cannot remove the default Inbox project.');
+        }
+    };
+
+    const removeProjectTodo = (projectId, todoId) => {
+        const project = projectsState.find(p => p.id === projectId);
+
+        if (project) {
+            project.removeTodo(todoId);
+            save();
+        }
+    };
+
+    const editProjectTodo = (projectId, todoId, updates) => {
+        const project = projectsState.find(p => p.id === projectId);
+
+        if (project) {
+            project.editTodo(todoId, updates);
+            save();
+        }
+    };
+
+    const getAllProjects = () => [...projectsState];
+    const getInboxProject = () => projectsState[0];
+
+    return {
+        init,
+        addProject,
+        addProjectTodo,
+        removeProject,
+        removeProjectTodo,
+        editProjectTodo,
+        getAllProjects,
+        getInboxProject,
+    };
+
+})();
+
 // Application Initialization
 
 if (storageAvailable('localStorage')) {
@@ -58,13 +191,4 @@ if (storageAvailable('localStorage')) {
     console.log("Local storage is NOT available. Data will not persist.");
 }
 
-const inboxProject = getDefaultProject();
-
-const newTask = TodoFactory(
-    "New Habit", 
-    "Start drinking more water.", 
-    format(new Date(), 'yyyy-MM-dd'),
-    "medium"
-);
-
-inboxProject.addTodo(newTask);
+ProjectManager.init();
