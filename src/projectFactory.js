@@ -2,10 +2,21 @@ const ProjectFactory = (title, description = "") => {
     
     const id = crypto.randomUUID();
 
+
+    let projectTitle = title;
+    let projectDescription = description;
     let todos = [];
 
-    const getTitle = () => title;
-    const getDescription = () => description;
+    const setTitle = (newTitle) => {
+        projectTitle = newTitle;
+    };
+
+    const setDescription = (newDescription) => {
+        projectDescription = newDescription;
+    };
+
+    const getTitle = () => projectTitle;
+    const getDescription = () => projectDescription;
     const getTodos = () => [...todos];
 
     const addTodo = (todoItem) => {
@@ -52,6 +63,8 @@ const ProjectFactory = (title, description = "") => {
         getTitle,
         getDescription,
         getTodos,
+        setTitle,
+        setDescription,
         addTodo,
         removeTodo,
         editTodo,

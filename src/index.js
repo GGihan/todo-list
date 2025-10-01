@@ -158,6 +158,30 @@ const ProjectManager = (() => {
         }
     };
 
+    const editProject = (projectId, updates) => {
+        const project = projectsState.find(p => p.id === projectId);
+
+        if (!project) return;
+
+        const setterMap = {
+            title: 'setTitle',
+            description: 'setDescription',
+        };
+
+        Object.keys(updates).forEach(key => {
+            const setterName = setterMap[key];
+            const newValue = updates[key];
+
+            // 1. Check if we have a valid setter mapped AND 
+            // 2. Check if the project object actually has that setter function
+            if (setterName && typeof project[setterName] === 'function') {
+                project[setterName](newValue);
+            }
+        });
+
+        save();
+    };
+
     const editProjectTodo = (projectId, todoId, updates) => {
         const project = projectsState.find(p => p.id === projectId);
 
@@ -176,6 +200,7 @@ const ProjectManager = (() => {
         addProjectTodo,
         removeProject,
         removeProjectTodo,
+        editProject,
         editProjectTodo,
         getAllProjects,
         getInboxProject,
