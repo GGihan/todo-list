@@ -6,6 +6,184 @@
     <title>Todo-List</title>
 </head>
 <body>
-    <h1>Test</h1>
+    <header id="header-container">
+        <h1>Todo-List</h1>
+        <img src="./images/todo.svg" alt="Todo Icon">
+        <img src="./images/bell-ring.svg" alt="Notification Bell">
+    </header>
+    
+    <div id="content-area">
+
+        <div id="sidebar">
+            <ul>
+
+                <li id="home">
+                    <img src="./images/home.svg" alt="Home">
+                    <a>Home</a>
+                </li>
+
+                <li>
+                    <img src="./images/bell.svg" alt="Notification Bell">
+                    <a>Notifications</a>
+                </li>
+
+                <li>
+                    <img src="./images/profile-settings.svg" alt="Cog">
+                    <a>Profile Settings</a>
+                </li>
+
+            </ul>
+                
+        </div>
+
+        <main id="main-container">
+            
+            <div id="project-toolbar">
+                
+                <h1>Projects:</h1>
+
+                <div class="project-buttons">
+
+                    <button>New Project</button>
+                    <button>Edit Project</button>
+                    <button>Remove Project</button>
+                    
+                </div>
+
+            </div>
+
+            <div id="main-content">
+
+                <div class="project">
+                    <h2>Project Title</h2>
+
+                    <p>
+                        Project test description, just typing more so
+                        I can see whats happening if
+                        I type a very long sentence.
+                    </p>
+
+                    <div class="todos">
+
+                        <div class="todo">
+                            <p>Todo Title</p>
+                            <p>Todo Due Date</p>
+                        </div>
+
+                        <div class="todo">
+                            <p>Todo Title</p>
+                            <p>Todo Due Date</p>
+                        </div>
+
+                        <div class="todo">
+                            <p>Todo Title</p>
+                            <p>Todo Due Date</p>
+                        </div>
+
+                        <div class="todo">
+                            <p>Todo Title</p>
+                            <p>Todo Due Date</p>
+                        </div>
+
+                        
+                    </div>
+
+                    <div class="todo-buttons">
+
+                        <button>Add</button>
+
+                    </div>
+
+                </div>
+
+                <div class="project">
+
+                    <h2>Project 2 Title</h2>
+
+                    <p>
+                        Project test description, just typing more so
+                        I can see whats happening if
+                        I type a very long sentence.
+                    </p>
+
+                    <div class="todos">
+
+                        <div class="todo-expanded">
+
+                            <ul class="todo-details">
+
+                                <li>
+                                    <p>Todo Title</p>
+                                </li>
+
+                                <li>
+                                    <p>
+                                        Todo test description, just typing more so
+                                        I can see whats happening if
+                                        I type a very long sentence.
+                                    </p>
+                                </li>
+
+                                <li>
+                                    <p>Todo Due Date</p>
+                                </li>
+
+                                <li>
+                                    <p>Todo Priority</p>
+                                </li>
+
+                                <li>
+                                    <p>Todo Notes</p>
+                                </li>
+
+                                <li>
+                                    <p>Todo is complete</p>
+                                </li>
+
+                            </ul>
+
+                            <div class="todo-expanded-buttons">
+
+                                <button>Remove</button>
+                                <button>Close</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="todo-buttons">
+
+                        <button>Add</button>
+
+                    </div>
+
+                </div>
+
+                <div class="project">
+
+                </div>
+
+                <div class="project">
+
+                </div>
+
+                <div class="project">
+
+                </div>
+
+                <div class="project">
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <footer id="footer-container">
+        <p>GGihan @ Github</p>
+    </footer>
 </body>
 </html>

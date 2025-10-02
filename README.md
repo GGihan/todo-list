@@ -1,5 +1,6 @@
 # todo-list
 An interactive Todo-List to store your projects and goals.
 
+Sources:
 
-const setterMap is incomplete, missing a working property (setNotes or toggleComplete)
+Icons by https://pictogrammers.com.
