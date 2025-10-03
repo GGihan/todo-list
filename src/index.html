@@ -56,7 +56,7 @@
 
             <div id="main-content">
 
-                
+            
 
             </div>
 
@@ -67,5 +67,42 @@
     <footer id="footer-container">
         <p>GGihan @ Github</p>
     </footer>
+
+
+    <div id="add-todo-modal" class="modal">
+
+        <div class="modal-content">
+
+            <form id="add-todo-form">
+
+                <h2>New Todo</h2>
+                <input type="hidden" id="project-id-for-todo" name="projectId">
+                
+                <label for="todo-title">Title:</label>
+                <input type="text" id="todo-title" name="title" required>
+                
+                <label for="todo-description">Description:</label>
+                <textarea id="todo-description" name="description"></textarea>
+                
+                <label for="todo-dueDate">Due Date:</label>
+                <input type="date" id="todo-dueDate" name="dueDate" required>
+                
+                <label for="todo-priority">Priority:</label>
+                <select id="todo-priority" name="priority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+                
+                <div class="modal-buttons">
+                    <button type="button" id="cancel-todo-button">Cancel</button>
+                    <button type="submit">Add Todo</button>
+                </div>
+
+            </form>
+
+        </div>
+        
+    </div>
 </body>
 </html>

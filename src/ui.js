@@ -6,6 +6,10 @@ const UIManager = (() => {
 
     const mainContent = document.getElementById('main-content');
     const addProjectButton = document.getElementById('add-project-button');
+    const addTodoModal = document.getElementById('add-todo-modal');
+    const addTodoForm = document.getElementById('add-todo-form');
+    const cancelTodoButton = document.getElementById('cancel-todo-button');
+    const projectIdInput = document.getElementById('project-id-for-todo');
 
 
     const handleTodoClick = (e, todo, project, projectCard) => {
@@ -17,8 +21,40 @@ const UIManager = (() => {
     };
 
 
-    const handleCloseTodo = (todo, project, projectCard) => {
-        renderProject(project, projectCard);
+    const handleCloseTodo = (e, todo, project, projectCard) => {
+        const expandedTodoElement = e.currentTarget.closest('.todo-expanded');
+
+        if (expandedTodoElement) {
+            const simpleTodoElement = createTodoElement(todo, project, projectCard);
+            expandedTodoElement.replaceWith(simpleTodoElement);
+        }
+
+
+    };
+
+    const handleAddTodoClick = (project) => {
+        projectIdInput.value = project.id;
+        addTodoModal.classList.add('active');
+    };
+
+    const handleTodoFormSubmit = (e) => {
+        e.preventDefault(); // Prevent page refresh
+
+        const projectId = projectIdInput.value;
+        const title = addTodoForm.elements.title.value;
+        const description = addTodoForm.elements.description.value;
+        const dueDate = addTodoForm.elements.dueDate.value;
+        const priority = addTodoForm.elements.priority.value;
+        
+       
+        const newTodo = TodoFactory(title, description, dueDate, priority);
+        
+       
+        ProjectManager.addProjectTodo(projectId, newTodo);
+        
+        addTodoForm.reset();
+        addTodoModal.classList.remove('active');
+        renderAllProjects();
     };
 
 
@@ -70,7 +106,7 @@ const UIManager = (() => {
         });
 
         const closeBtn = expandedDiv.querySelector('.close-todo-button');
-        closeBtn.addEventListener('click', () => handleCloseTodo(todo, project, projectCard));
+        closeBtn.addEventListener('click', (e) => handleCloseTodo(e, todo, project, projectCard));
 
 
         removeBtn.id = 'remove-todo-button';
@@ -117,6 +153,7 @@ const UIManager = (() => {
         addTodoBtn.textContent = '+';
         todoButtons.appendChild(addTodoBtn);
 
+        addTodoBtn.addEventListener('click', () => handleAddTodoClick(project));
         projectCardElement.append(title, hr1, description, hr2, todosContainer, todoButtons);
     };
 
@@ -134,6 +171,13 @@ const UIManager = (() => {
             //  pop up a form to get new project details
             
         });
+
+        cancelTodoButton.addEventListener('click', () => {
+            addTodoForm.reset();
+            addTodoModal.classList.remove('active');
+        });
+
+        addTodoForm.addEventListener('submit', handleTodoFormSubmit);
 
         renderAllProjects();
     };
