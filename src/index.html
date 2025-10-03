@@ -9,9 +9,9 @@
     <header id="header-container">
         <div id="title-container">
             <h1>Todo-List</h1>
-            <img src="./images/todo.svg" alt="Todo Icon">
+            <img src="./images/todo.svg" alt="Todo Icon" width="50px">
         </div>
-        <img src="./images/bell-ring.svg" alt="Notification Bell">
+        <img src="./images/bell-ring.svg" alt="Notification Bell" width="50px">
     </header>
     
     <div id="content-area">
@@ -20,17 +20,17 @@
             <ul>
 
                 <li id="home">
-                    <img src="./images/home.svg" alt="Home">
+                    <img src="./images/home.svg" alt="Home" width="40px">
                     <a>Home</a>
                 </li>
 
                 <li>
-                    <img src="./images/bell.svg" alt="Notification Bell">
+                    <img src="./images/bell.svg" alt="Notification Bell" width="40px">
                     <a>Notifications</a>
                 </li>
 
                 <li>
-                    <img src="./images/profile-settings.svg" alt="Cog">
+                    <img src="./images/profile-settings.svg" alt="Cog" width="40px">
                     <a>Profile Settings</a>
                 </li>
 
@@ -59,11 +59,15 @@
                 <div class="project">
                     <h2>Project Title</h2>
 
+                    <hr>
+
                     <p>
                         Project test description, just typing more so
                         I can see whats happening if
                         I type a very long sentence.
                     </p>
+
+                    <hr>
 
                     <div class="todos">
 
@@ -92,7 +96,7 @@
 
                     <div class="todo-buttons">
 
-                        <button>Add</button>
+                        <button type="button" id="add-todo-button">+</button>
 
                     </div>
 
@@ -102,11 +106,15 @@
 
                     <h2>Project 2 Title</h2>
 
+                    <hr>
+
                     <p>
                         Project test description, just typing more so
                         I can see whats happening if
                         I type a very long sentence.
                     </p>
+
+                    <hr>
 
                     <div class="todos">
 
@@ -146,8 +154,8 @@
 
                             <div class="todo-expanded-buttons">
 
-                                <button>Remove</button>
-                                <button>Close</button>
+                                <button type="button" id="remove-todo-button">Remove</button>
+                                <button type="button" id="close-todo-button">Close</button>
 
                             </div>
                         </div>
@@ -156,7 +164,7 @@
 
                     <div class="todo-buttons">
 
-                        <button>Add</button>
+                        <button type="button" id="add-todo-button">+</button>
 
                     </div>
 

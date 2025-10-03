@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: aliceblue;
+    background-color: rgb(171, 179, 188);
     min-height: 100vh;
 
     display: flex;
@@ -14,9 +14,11 @@ body {
     margin: 0;
 }
 
+li {
+    list-style: none;
+}
+
 button {
-    background: none;
-    border: none;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -52,6 +54,10 @@ div {
     padding: 10px;
 }
 
+#title-container h1 {
+    font-size: 2.25rem;
+}
+
 #content-area {
     flex-grow: 1;
     display: flex;
@@ -75,7 +81,7 @@ div {
     align-items: center;
     font-size: 1.25rem;
     padding: 5px;
-    gap: 5px;
+    gap: 10px;
 }
 
 #sidebar img {
@@ -112,9 +118,10 @@ h1 {
 .project-buttons button {
     height: 35px;
     width: 150px;
+    font-size: 1rem;
 
-    border: 3px solid black;
-    border-radius: 20px;
+    outline: 1px solid black;
+    border-radius: 15px;
     box-sizing: border-box;
     background-color: hsl(82, 95%, 30%);
     color: white;
@@ -123,6 +130,8 @@ h1 {
 #main-content {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 20px;
 }
 
 .project {
@@ -132,13 +141,19 @@ h1 {
     gap: 10px;
     min-height: 350px;
     min-width: 400px;
+
+    background-color: gainsboro;
+    border: 3px solid rgb(103, 102, 102);
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 .todos {
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 5px;
+    gap: 10px;
 }
 
 .todo {
@@ -147,10 +162,44 @@ h1 {
     gap: 20px;
 }
 
+.todo-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+#add-todo-button,
+#remove-todo-button,
+#close-todo-button {
+    width: 60px;
+    height: 25px;
+    border-radius: 5px;
+    outline: 1px solid black;
+    color: white;
+}
+
+#add-todo-button {
+    background-color: hsl(82, 95%, 30%);
+}
+
+#remove-todo-button {
+    background-color: hsl(0, 60%, 52%);
+}
+
+#close-todo-button {
+    background-color: rgb(86, 129, 86)
+}
+
 .todo-expanded {
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.todo-expanded-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
 
 .todo-details {
@@ -158,6 +207,7 @@ h1 {
     flex-direction: column;
     flex: 1;
     justify-content: flex-start;
+    gap: 5px;
 }
 
 #footer-container {
