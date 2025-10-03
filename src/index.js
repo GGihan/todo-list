@@ -9,6 +9,7 @@ import {
     parseISO, 
     startOfDay 
 } from 'date-fns';
+import { UIManager } from './ui.js';
 
 
 // Testing so it doesnt crash when it isnt available.
@@ -217,3 +218,7 @@ if (storageAvailable('localStorage')) {
 }
 
 ProjectManager.init();
+
+UIManager.init();
+
+export { ProjectManager };
