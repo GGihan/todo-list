@@ -28,10 +28,6 @@ img {
     width: 50px;
 }
 
-div {
-    /* border: 2px solid darkblue; */
-}
-
 #header-container {
     display: flex;
     height: 4rem;
@@ -132,6 +128,7 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding: 20px;
+    align-items: start;
 }
 
 .project {
@@ -287,4 +284,19 @@ h1 {
 .modal-buttons button[type="submit"] {
     background-color: hsl(145, 59%, 28%);
     color: white;
+}
+
+#add-todo-form textarea,
+#add-project-form textarea {
+    resize: vertical;
+    min-height: 80px; 
+}
+
+#add-todo-form input,
+#add-todo-form textarea,
+#add-todo-form select,
+#add-project-form input,
+#add-project-form textarea {
+    width: 100%;
+    box-sizing: border-box;
 }

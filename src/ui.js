@@ -1,4 +1,5 @@
 import { ProjectManager } from './index.js';
+import { ProjectFactory } from './projectFactory.js';
 import { TodoFactory } from './todoFactory.js';
 import { format, parseISO } from 'date-fns';
 
@@ -10,6 +11,9 @@ const UIManager = (() => {
     const addTodoForm = document.getElementById('add-todo-form');
     const cancelTodoButton = document.getElementById('cancel-todo-button');
     const projectIdInput = document.getElementById('project-id-for-todo');
+    const addProjectModal = document.getElementById('add-project-modal');
+    const addProjectForm = document.getElementById('add-project-form');
+    const cancelProjectButton = document.getElementById('cancel-project-button');
 
 
     const handleTodoClick = (e, todo, project, projectCard) => {
@@ -54,6 +58,21 @@ const UIManager = (() => {
         
         addTodoForm.reset();
         addTodoModal.classList.remove('active');
+        renderAllProjects();
+    };
+
+    const handleProjectFormSubmit = (e) => {
+        e.preventDefault();
+
+        const title = addProjectForm.elements.title.value;
+        const description = addProjectForm.elements.description.value;
+
+        const newProject = ProjectFactory(title, description);
+
+        ProjectManager.addProject(newProject);
+
+        addProjectForm.reset();
+        addProjectModal.classList.remove('active');
         renderAllProjects();
     };
 
@@ -168,9 +187,15 @@ const UIManager = (() => {
     
     const init = () => {
         addProjectButton.addEventListener('click', () => {
-            //  pop up a form to get new project details
-            
+            addProjectModal.classList.add('active');  
         });
+
+        cancelProjectButton.addEventListener('click', () => {
+            addProjectForm.reset();
+            addProjectModal.classList.remove('active');
+        });
+
+        addProjectForm.addEventListener('submit', handleProjectFormSubmit);
 
         cancelTodoButton.addEventListener('click', () => {
             addTodoForm.reset();
