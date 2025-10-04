@@ -93,6 +93,64 @@ const UIManager = (() => {
         renderAllProjects();
     };
 
+    const makeEditable = (element, todo, project, projectCard, propertyKey) => {
+        element.addEventListener('click', () => {
+            const currentValue = todo.getDetails()[propertyKey];
+            let inputElement;
+
+            // Create the correct type of input field based on the property
+            if (propertyKey === 'description' || propertyKey === 'notes') {
+                inputElement = document.createElement('textarea');
+                inputElement.style.height = '80px';
+
+            } else if (propertyKey === 'dueDate') {
+                inputElement = document.createElement('input');
+                inputElement.type = 'date';
+
+            } else if (propertyKey === 'priority') {
+                inputElement = document.createElement('select');
+                ['low', 'medium', 'high'].forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    option.textContent = optionValue.charAt(0).toUpperCase() + optionValue.slice(1);
+                    if (optionValue === currentValue) {
+                        option.selected = true;
+                    }
+                    inputElement.appendChild(option);
+                });
+
+            } else { 
+                inputElement = document.createElement('input');
+                inputElement.type = 'text';
+            }
+            
+            inputElement.value = currentValue;
+            element.replaceWith(inputElement);
+            inputElement.focus();
+
+            
+            const saveChanges = () => {
+                const newValue = inputElement.value;
+                if (newValue !== currentValue) {
+                    ProjectManager.editProjectTodo(project.id, todo.id, { [propertyKey]: newValue });
+                }
+                
+                renderProject(project, projectCard);
+            };
+
+            
+            inputElement.addEventListener('blur', saveChanges);
+
+            inputElement.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && inputElement.type !== 'textarea') {
+                    saveChanges();
+                }
+            });
+
+        });
+
+    };
+
 
     const createTodoElement = (todo, project, projectCard) => {
         const todoDiv = document.createElement('div');
@@ -120,20 +178,70 @@ const UIManager = (() => {
         expandedDiv.classList.add('todo-expanded');
         const details = todo.getDetails();
 
-        expandedDiv.innerHTML = `
-            <ul class="todo-details">
-                <li><p><strong>Title:</strong> ${details.title}</p></li>
-                <li><p><strong>Description:</strong> ${details.description}</p></li>
-                <li><p><strong>Due:</strong> ${format(parseISO(details.dueDate), 'PPPP')}</p></li>
-                <li><p><strong>Priority:</strong> ${details.priority}</p></li>
-                <li><p><strong>Notes:</strong> ${details.notes || 'N/A'}</p></li>
-                <li><p><strong>Status:</strong> ${details.isComplete ? 'Complete' : 'Incomplete'}</p></li>
-            </ul>
-            <div class="todo-expanded-buttons">
-                <button type="button" class="remove-todo-button">Remove</button>
-                <button type="button" class="close-todo-button">Close</button>
-            </div>
+        
+        const detailsList = document.createElement('ul');
+        detailsList.classList.add('todo-details');
+
+        // Title
+        const titleLi = document.createElement('li');
+        const titleP = document.createElement('p');
+        titleP.innerHTML = `<strong>Title:</strong> ${details.title}`;
+        titleLi.appendChild(titleP);
+        makeEditable(titleP, todo, project, projectCard, 'title');
+
+        // Description
+        const descLi = document.createElement('li');
+        const descP = document.createElement('p');
+        descP.innerHTML = `<strong>Description:</strong> ${details.description}`;
+        descLi.appendChild(descP);
+        makeEditable(descP, todo, project, projectCard, 'description');
+
+        // Due Date
+        const dateLi = document.createElement('li');
+        const dateP = document.createElement('p');
+        dateP.innerHTML = `<strong>Due:</strong> ${format(parseISO(details.dueDate), 'PPPP')}`;
+        dateLi.appendChild(dateP);
+        makeEditable(dateP, todo, project, projectCard, 'dueDate');
+
+        // Priority
+        const priorityLi = document.createElement('li');
+        const priorityP = document.createElement('p');
+        priorityP.innerHTML = `<strong>Priority:</strong> ${details.priority}`;
+        priorityLi.appendChild(priorityP);
+        makeEditable(priorityP, todo, project, projectCard, 'priority');
+
+        // Notes
+        const notesLi = document.createElement('li');
+        const notesP = document.createElement('p');
+        notesP.innerHTML = `<strong>Notes:</strong> ${details.notes || 'N/A'}`;
+        notesLi.appendChild(notesP);
+        makeEditable(notesP, todo, project, projectCard, 'notes');
+
+        // Status
+        const statusLi = document.createElement('li');
+        const statusP = document.createElement('p');
+        statusP.innerHTML = `<strong>Status:</strong> ${details.isComplete ? 'Complete ✅' : 'Incomplete ⏳'}`;
+        statusP.style.cursor = 'pointer';
+        statusLi.appendChild(statusP);
+
+        // Status Listener
+        statusP.addEventListener('click', () => {
+            ProjectManager.editProjectTodo(project.id, todo.id, { isComplete: !details.isComplete });
+            renderProject(project, projectCard);
+        });
+
+
+        detailsList.append(titleLi, descLi, dateLi, priorityLi, notesLi, statusLi);
+        
+        // Buttons container
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.classList.add('todo-expanded-buttons');
+        buttonsDiv.innerHTML = `
+            <button type="button" class="remove-todo-button" id="remove-todo-button">Remove</button>
+            <button type="button" class="close-todo-button" id="close-todo-button">Close</button>
         `;
+
+        expandedDiv.append(detailsList, buttonsDiv);
 
         const removeBtn = expandedDiv.querySelector('.remove-todo-button');
         removeBtn.addEventListener('click', () => {
@@ -143,10 +251,6 @@ const UIManager = (() => {
 
         const closeBtn = expandedDiv.querySelector('.close-todo-button');
         closeBtn.addEventListener('click', (e) => handleCloseTodo(e, todo, project, projectCard));
-
-
-        removeBtn.id = 'remove-todo-button';
-        closeBtn.id = 'close-todo-button';
 
         return expandedDiv;
     };
