@@ -93,8 +93,37 @@ const UIManager = (() => {
         renderAllProjects();
     };
 
+
+    const createDetailElement = (todo, propertyKey) => {
+        const p = document.createElement('p');
+        const details = todo.getDetails();
+        const value = details[propertyKey];
+
+        switch (propertyKey) {
+            case 'title':
+                p.innerHTML = `<strong>Title:</strong> ${value}`;
+                break;
+            case 'description':
+                p.innerHTML = `<strong>Description:</strong> ${value || 'N/A'}`;
+                break;
+            case 'dueDate':
+                p.innerHTML = `<strong>Due:</strong> ${format(parseISO(value), 'PPPP')}`;
+                break;
+            case 'priority':
+                p.innerHTML = `<strong>Priority:</strong> ${value}`;
+                break;
+            case 'notes':
+                p.innerHTML = `<strong>Notes:</strong> ${value || 'N/A'}`;
+                break;
+        }
+        return p;
+    };
+
     const makeEditable = (element, todo, project, projectCard, propertyKey) => {
         element.addEventListener('click', () => {
+
+            let isSaving = false;
+
             const currentValue = todo.getDetails()[propertyKey];
             let inputElement;
 
@@ -130,12 +159,18 @@ const UIManager = (() => {
 
             
             const saveChanges = () => {
+                if (isSaving) return;
+                isSaving = true;
+
                 const newValue = inputElement.value;
                 if (newValue !== currentValue) {
                     ProjectManager.editProjectTodo(project.id, todo.id, { [propertyKey]: newValue });
                 }
                 
-                renderProject(project, projectCard);
+                const newDetailElement = createDetailElement(todo, propertyKey);
+                inputElement.replaceWith(newDetailElement);
+
+                makeEditable(newDetailElement, todo, project, projectCard, propertyKey);
             };
 
             
@@ -176,64 +211,40 @@ const UIManager = (() => {
     const createExpandedTodoElement = (todo, project, projectCard) => {
         const expandedDiv = document.createElement('div');
         expandedDiv.classList.add('todo-expanded');
-        const details = todo.getDetails();
-
         
         const detailsList = document.createElement('ul');
         detailsList.classList.add('todo-details');
 
-        // Title
-        const titleLi = document.createElement('li');
-        const titleP = document.createElement('p');
-        titleP.innerHTML = `<strong>Title:</strong> ${details.title}`;
-        titleLi.appendChild(titleP);
-        makeEditable(titleP, todo, project, projectCard, 'title');
 
-        // Description
-        const descLi = document.createElement('li');
-        const descP = document.createElement('p');
-        descP.innerHTML = `<strong>Description:</strong> ${details.description}`;
-        descLi.appendChild(descP);
-        makeEditable(descP, todo, project, projectCard, 'description');
-
-        // Due Date
-        const dateLi = document.createElement('li');
-        const dateP = document.createElement('p');
-        dateP.innerHTML = `<strong>Due:</strong> ${format(parseISO(details.dueDate), 'PPPP')}`;
-        dateLi.appendChild(dateP);
-        makeEditable(dateP, todo, project, projectCard, 'dueDate');
-
-        // Priority
-        const priorityLi = document.createElement('li');
-        const priorityP = document.createElement('p');
-        priorityP.innerHTML = `<strong>Priority:</strong> ${details.priority}`;
-        priorityLi.appendChild(priorityP);
-        makeEditable(priorityP, todo, project, projectCard, 'priority');
-
-        // Notes
-        const notesLi = document.createElement('li');
-        const notesP = document.createElement('p');
-        notesP.innerHTML = `<strong>Notes:</strong> ${details.notes || 'N/A'}`;
-        notesLi.appendChild(notesP);
-        makeEditable(notesP, todo, project, projectCard, 'notes');
-
-        // Status
-        const statusLi = document.createElement('li');
-        const statusP = document.createElement('p');
-        statusP.innerHTML = `<strong>Status:</strong> ${details.isComplete ? 'Complete ✅' : 'Incomplete ⏳'}`;
-        statusP.style.cursor = 'pointer';
-        statusLi.appendChild(statusP);
-
-        // Status Listener
-        statusP.addEventListener('click', () => {
-            ProjectManager.editProjectTodo(project.id, todo.id, { isComplete: !details.isComplete });
-            renderProject(project, projectCard);
+        ['title', 'description', 'dueDate', 'priority', 'notes'].forEach(key => {
+            const li = document.createElement('li');
+            const p = createDetailElement(todo, key);
+            li.appendChild(p);
+            detailsList.appendChild(li);
+            makeEditable(p, todo, project, projectCard, key);
         });
 
+        const statusLi = document.createElement('li');
+        const statusP = document.createElement('p');
+        const updateStatusText = () => {
+            const isComplete = todo.getDetails().isComplete;
+            statusP.innerHTML = `<strong>Status:</strong> ${isComplete ? 'Complete ✅' : 'Incomplete ⏳'}`;
+        };
 
-        detailsList.append(titleLi, descLi, dateLi, priorityLi, notesLi, statusLi);
+        updateStatusText();
+        statusP.style.cursor = 'pointer';
+        statusLi.appendChild(statusP);
         
-        // Buttons container
+        statusP.addEventListener('click', () => {
+            const currentStatus = todo.getDetails().isComplete;
+            ProjectManager.editProjectTodo(project.id, todo.id, { isComplete: !currentStatus });
+            
+            updateStatusText();
+        });
+
+        detailsList.appendChild(statusLi);
+        
+        
         const buttonsDiv = document.createElement('div');
         buttonsDiv.classList.add('todo-expanded-buttons');
         buttonsDiv.innerHTML = `
