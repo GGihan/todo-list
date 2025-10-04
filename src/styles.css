@@ -146,6 +146,11 @@ h1 {
     padding: 10px;
 }
 
+.project.selected {
+    box-shadow: 0 0 10px 3px hsl(145, 59%, 28%);
+    border-color: hsl(145, 59%, 28%);
+}
+
 .project p {
     overflow-wrap: break-word;
 }

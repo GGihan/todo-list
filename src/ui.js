@@ -5,8 +5,11 @@ import { format, parseISO } from 'date-fns';
 
 const UIManager = (() => {
 
+    let selectedProjectId = null;
+
     const mainContent = document.getElementById('main-content');
     const addProjectButton = document.getElementById('add-project-button');
+    const editProjectButton = document.getElementById('edit-project-button');
     const addTodoModal = document.getElementById('add-todo-modal');
     const addTodoForm = document.getElementById('add-todo-form');
     const cancelTodoButton = document.getElementById('cancel-todo-button');
@@ -61,18 +64,31 @@ const UIManager = (() => {
         renderAllProjects();
     };
 
+    const handleProjectSelection = (project, projectCard) => {
+        selectedProjectId = project.id;
+
+        document.querySelectorAll('.project').forEach(card => {
+            card.classList.remove('selected');
+        });
+
+        projectCard.classList.add('selected');
+    };
+
     const handleProjectFormSubmit = (e) => {
         e.preventDefault();
 
         const title = addProjectForm.elements.title.value;
         const description = addProjectForm.elements.description.value;
 
-        const newProject = ProjectFactory(title, description);
 
-        ProjectManager.addProject(newProject);
+        if (selectedProjectId) {
+            ProjectManager.editProject(selectedProjectId, { title, description });
+        } else {
+            const newProject = ProjectFactory(title, description);
+            ProjectManager.addProject(newProject);
+        }
 
-        addProjectForm.reset();
-        addProjectModal.classList.remove('active');
+        resetProjectModal();
         renderAllProjects();
     };
 
@@ -134,12 +150,24 @@ const UIManager = (() => {
         return expandedDiv;
     };
 
+    const resetProjectModal = () => {
+        addProjectForm.reset();
+        addProjectModal.classList.remove('active');
+        
+        addProjectModal.querySelector('h2').textContent = 'New Project';
+        addProjectModal.querySelector('button[type="submit"]').textContent = 'Add Project';
+        selectedProjectId = null;
+    }
+
     const createProjectCard = (project) => {
         const projectCard = document.createElement('div');
         projectCard.classList.add('project');
         projectCard.setAttribute('data-project-id', project.id);
 
         renderProject(project, projectCard);
+
+        projectCard.addEventListener('click', () => handleProjectSelection(project, projectCard));
+
         return projectCard;
     };
 
@@ -183,17 +211,40 @@ const UIManager = (() => {
             const projectCard = createProjectCard(project);
             mainContent.appendChild(projectCard);
         });
+
+        if (selectedProjectId) {
+            const selectedCard = document.querySelector(`[data-project-id="${selectedProjectId}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+        }
     };
     
     const init = () => {
         addProjectButton.addEventListener('click', () => {
+            resetProjectModal();
             addProjectModal.classList.add('active');  
         });
 
-        cancelProjectButton.addEventListener('click', () => {
-            addProjectForm.reset();
-            addProjectModal.classList.remove('active');
+        editProjectButton.addEventListener('click', () => {
+            if (!selectedProjectId) {
+                alert('Please select a project to edit first!');
+                return;
+            }
+            const projectToEdit = ProjectManager.getAllProjects().find(p => p.id === selectedProjectId);
+            if (projectToEdit) {
+               
+                addProjectForm.elements.title.value = projectToEdit.getTitle();
+                addProjectForm.elements.description.value = projectToEdit.getDescription();
+                
+                addProjectModal.querySelector('h2').textContent = 'Edit Project';
+                addProjectModal.querySelector('button[type="submit"]').textContent = 'Save Changes';
+
+                addProjectModal.classList.add('active');
+            }
         });
+
+        cancelProjectButton.addEventListener('click', resetProjectModal);
 
         addProjectForm.addEventListener('submit', handleProjectFormSubmit);
 
