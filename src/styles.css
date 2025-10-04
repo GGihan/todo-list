@@ -146,6 +146,10 @@ h1 {
     padding: 10px;
 }
 
+.project p {
+    overflow-wrap: break-word;
+}
+
 .todos {
     display: flex;
     flex-direction: column;
@@ -155,8 +159,19 @@ h1 {
 
 .todo {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
     gap: 20px;
+}
+
+.todo p:first-child {
+    flex-grow: 1; 
+    overflow-wrap: break-word;
+}
+
+.todo p:last-child {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .todo-buttons {
