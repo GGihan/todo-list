@@ -10,6 +10,7 @@ const UIManager = (() => {
     const mainContent = document.getElementById('main-content');
     const addProjectButton = document.getElementById('add-project-button');
     const editProjectButton = document.getElementById('edit-project-button');
+    const removeProjectButton = document.getElementById('remove-project-button');
     const addTodoModal = document.getElementById('add-todo-modal');
     const addTodoForm = document.getElementById('add-todo-form');
     const cancelTodoButton = document.getElementById('cancel-todo-button');
@@ -243,6 +244,30 @@ const UIManager = (() => {
                 addProjectModal.classList.add('active');
             }
         });
+
+        removeProjectButton.addEventListener('click', () => {
+            
+            if (!selectedProjectId) {
+                alert('Please select a project to remove first!');
+                return;
+            }
+
+            const inboxProject = ProjectManager.getInboxProject();
+            if (selectedProjectId === inboxProject.id) {
+                alert('The default "Inbox" project cannot be removed.');
+                return;
+            }
+
+            const projectToRemove = ProjectManager.getAllProjects().find(p => p.id === selectedProjectId);
+            const isConfirmed = confirm(`Are you sure you want to remove the project "${projectToRemove.getTitle()}"?`);
+
+            if (isConfirmed) {
+                ProjectManager.removeProject(selectedProjectId);
+                selectedProjectId = null; 
+                renderAllProjects();
+            }
+        });
+
 
         cancelProjectButton.addEventListener('click', resetProjectModal);
 
