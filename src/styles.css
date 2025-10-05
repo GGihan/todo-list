@@ -172,6 +172,7 @@ h1 {
 .todo p:first-child {
     flex-grow: 1; 
     overflow-wrap: break-word;
+    min-width: 0;
 }
 
 .todo p:last-child {

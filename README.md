@@ -7,5 +7,3 @@ Icons by https://pictogrammers.com.
 
 
 myNotes:
-
-maybe change expanded.div innerhtml to something else.
