@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-List</title>
+<script defer src="main.js"></script></head>
+<body>
+    <header id="header-container">
+        <div id="title-container">
+            <h1>Todo-List</h1>
+            <img src="69cb22568c04ac01ac23.svg" alt="Todo Icon" width="50px">
+        </div>
+        <img src="4c8f51883770a4972cd4.svg" alt="Notification Bell" width="50px">
+    </header>
+    
+    <div id="content-area">
+
+        <div id="sidebar">
+            <ul>
+
+                <li id="home">
+                    <img src="f8c7c536d6f704fbe961.svg" alt="Home" width="40px">
+                    <a>Home</a>
+                </li>
+
+                <li>
+                    <img src="d7dd104b583153da251a.svg" alt="Notification Bell" width="40px">
+                    <a>Notifications</a>
+                </li>
+
+                <li>
+                    <img src="f1e4c8067e3717156a28.svg" alt="Cog" width="40px">
+                    <a>Profile Settings</a>
+                </li>
+
+            </ul>
+                
+        </div>
+
+        <main id="main-container">
+            
+            <div id="project-toolbar">
+                
+                <h1>Projects:</h1>
+
+                <div class="project-buttons">
+
+                    <button type="button" id="add-project-button">New Project</button>
+                    <button type="button" id="edit-project-button">Edit Project</button>
+                    <button type="button" id="remove-project-button">Remove Project</button>
+                    
+                </div>
+
+            </div>
+
+            <div id="main-content">
+
+            
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <footer id="footer-container">
+        <p>GGihan @ Github</p>
+    </footer>
+
+
+    <div id="add-todo-modal" class="modal">
+
+        <div class="modal-content">
+
+            <form id="add-todo-form">
+
+                <h2>New Todo</h2>
+                <input type="hidden" id="project-id-for-todo" name="projectId">
+                
+                <label for="todo-title">Title:</label>
+                <input type="text" id="todo-title" name="title" required>
+                
+                <label for="todo-description">Description:</label>
+                <textarea id="todo-description" name="description"></textarea>
+                
+                <label for="todo-dueDate">Due Date:</label>
+                <input type="date" id="todo-dueDate" name="dueDate" required>
+                
+                <label for="todo-priority">Priority:</label>
+                <select id="todo-priority" name="priority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+                
+                <div class="modal-buttons">
+                    <button type="button" id="cancel-todo-button">Cancel</button>
+                    <button type="submit">Add Todo</button>
+                </div>
+
+            </form>
+
+        </div>
+        
+    </div>
+
+
+    <div id="add-project-modal" class="modal">
+
+        <div class="modal-content">
+
+            <form id="add-project-form">
+
+                <h2>New Project</h2>
+                
+                <label for="project-title">Title:</label>
+                <input type="text" id="project-title" name="title" required>
+                
+                <label for="project-description">Description:</label>
+                <textarea id="project-description" name="description"></textarea>
+                
+                <div class="modal-buttons">
+                    <button type="button" id="cancel-project-button">Cancel</button>
+                    <button type="submit">Add Project</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>
